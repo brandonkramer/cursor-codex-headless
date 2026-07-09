@@ -1,0 +1,47 @@
+{
+  "sources": [
+    {
+      "name": "Codex non-interactive mode (`codex exec`, `--ephemeral`, `resume`, stdin)",
+      "url": "https://developers.openai.com/codex/noninteractive",
+      "type": "docs"
+    },
+    {
+      "name": "Codex CLI developer commands (`codex exec`, sandbox flags)",
+      "url": "https://developers.openai.com/codex/cli/slash-commands",
+      "type": "docs"
+    },
+    {
+      "name": "Codex advanced configuration (profiles, `model_reasoning_effort`, sandbox modes)",
+      "url": "https://developers.openai.com/codex/config-advanced",
+      "type": "docs"
+    },
+    {
+      "name": "Codex sample `config.toml` (`approval_policy`, `sandbox_mode`, `service_tier`)",
+      "url": "https://developers.openai.com/codex/config-sample",
+      "type": "docs"
+    },
+    {
+      "name": "Custom instructions with `AGENTS.md`",
+      "url": "https://developers.openai.com/codex/guides/agents-md",
+      "type": "docs"
+    },
+    {
+      "name": "Codex profile file migration (independent `*.config.toml` since 0.134.0)",
+      "url": "https://github.com/openai/codex/commit/162a6e746b7b4ef6024ccc819bf8ceaaa5f802f6",
+      "type": "changelog"
+    }
+  ],
+  "updates": [
+    {
+      "name": "OpenAI Codex docs index",
+      "url": "https://developers.openai.com/codex",
+      "type": "docs"
+    },
+    {
+      "name": "OpenAI Codex GitHub releases",
+      "url": "https://github.com/openai/codex/releases",
+      "type": "changelog"
+    }
+  ],
+  "index": "https://developers.openai.com/codex/noninteractive"
+}

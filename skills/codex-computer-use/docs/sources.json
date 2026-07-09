@@ -1,0 +1,57 @@
+{
+  "sources": [
+    {
+      "name": "Codex non-interactive mode (`codex exec` for scripted verification)",
+      "url": "https://developers.openai.com/codex/noninteractive",
+      "type": "docs"
+    },
+    {
+      "name": "Codex Computer Use (desktop GUI control, screenshots, app interaction)",
+      "url": "https://developers.openai.com/codex/app/computer-use",
+      "type": "docs"
+    },
+    {
+      "name": "Codex use case — operate apps via Computer Use",
+      "url": "https://developers.openai.com/codex/use-cases/use-your-computer-with-codex",
+      "type": "docs"
+    },
+    {
+      "name": "Codex built-in Browser (local dev servers, page preview, `@Browser`)",
+      "url": "https://developers.openai.com/codex/app/browser",
+      "type": "docs"
+    },
+    {
+      "name": "Codex Chrome extension (`@Chrome`, signed-in browser state)",
+      "url": "https://developers.openai.com/codex/app/chrome-extension",
+      "type": "docs"
+    },
+    {
+      "name": "Codex app settings (Browser, Computer Use permissions)",
+      "url": "https://developers.openai.com/codex/app/settings",
+      "type": "docs"
+    },
+    {
+      "name": "Codex advanced configuration (sandbox modes, profiles)",
+      "url": "https://developers.openai.com/codex/config-advanced",
+      "type": "docs"
+    },
+    {
+      "name": "Custom instructions with `AGENTS.md`",
+      "url": "https://developers.openai.com/codex/guides/agents-md",
+      "type": "docs"
+    }
+  ],
+  "updates": [
+    {
+      "name": "OpenAI Codex app / Computer Use docs",
+      "url": "https://developers.openai.com/codex/app/computer-use",
+      "type": "docs"
+    },
+    {
+      "name": "OpenAI Codex GitHub releases",
+      "url": "https://github.com/openai/codex/releases",
+      "type": "changelog"
+    }
+  ],
+  "index": "https://developers.openai.com/codex/app/computer-use"
+}

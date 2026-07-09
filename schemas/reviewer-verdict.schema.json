@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": ["pass", "pass-with-notes", "fail"]
+    },
+    "summary": {
+      "type": "string"
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "command": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "output_snippet": { "type": "string" }
+        },
+        "required": ["command", "passed"],
+        "additionalProperties": false
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["blocker", "major", "minor", "nit"]
+          },
+          "file": { "type": "string" },
+          "line": { "type": "integer" },
+          "failure_mode": { "type": "string" },
+          "accepted": { "type": "boolean" },
+          "suggested_fix": { "type": "string" }
+        },
+        "required": ["severity", "file", "failure_mode", "accepted"],
+        "additionalProperties": false
+      }
+    },
+    "residual_gaps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "suggested_fixes": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["verdict", "summary", "tests", "findings", "residual_gaps"],
+  "additionalProperties": false
+}

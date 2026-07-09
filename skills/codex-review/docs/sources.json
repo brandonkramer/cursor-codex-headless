@@ -1,0 +1,47 @@
+{
+  "sources": [
+    {
+      "name": "Codex non-interactive mode (`codex exec`, `--ephemeral`, `resume`, stdin)",
+      "url": "https://developers.openai.com/codex/noninteractive",
+      "type": "docs"
+    },
+    {
+      "name": "Codex CLI developer commands (`codex exec review`, flags, `codex mcp-server`)",
+      "url": "https://developers.openai.com/codex/cli/slash-commands",
+      "type": "docs"
+    },
+    {
+      "name": "Codex advanced configuration (profiles as `~/.codex/<name>.config.toml`)",
+      "url": "https://developers.openai.com/codex/config-advanced",
+      "type": "docs"
+    },
+    {
+      "name": "Codex sample `config.toml` (profile file layout, sandbox, approval keys)",
+      "url": "https://developers.openai.com/codex/config-sample",
+      "type": "docs"
+    },
+    {
+      "name": "Custom instructions with `AGENTS.md`",
+      "url": "https://developers.openai.com/codex/guides/agents-md",
+      "type": "docs"
+    },
+    {
+      "name": "GitHub CLI manual (`gh pr diff`, `gh pr review`)",
+      "url": "https://cli.github.com/manual/",
+      "type": "docs"
+    }
+  ],
+  "updates": [
+    {
+      "name": "OpenAI Codex docs index",
+      "url": "https://developers.openai.com/codex",
+      "type": "docs"
+    },
+    {
+      "name": "OpenAI Codex GitHub releases",
+      "url": "https://github.com/openai/codex/releases",
+      "type": "changelog"
+    }
+  ],
+  "index": "https://developers.openai.com/codex"
+}

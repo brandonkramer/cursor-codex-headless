@@ -1,0 +1,42 @@
+{
+  "sources": [
+    {
+      "name": "Codex CLI `codex mcp-server` (stdio MCP; tools `codex`, `codex-reply`)",
+      "url": "https://developers.openai.com/codex/cli/slash-commands",
+      "type": "docs"
+    },
+    {
+      "name": "Codex advanced configuration (inline `config` keys)",
+      "url": "https://developers.openai.com/codex/config-advanced",
+      "type": "docs"
+    },
+    {
+      "name": "Codex sample `config.toml` (model, sandbox, approval_policy)",
+      "url": "https://developers.openai.com/codex/config-sample",
+      "type": "docs"
+    },
+    {
+      "name": "Codex non-interactive mode (`codex exec` + profiles alternative)",
+      "url": "https://developers.openai.com/codex/noninteractive",
+      "type": "docs"
+    },
+    {
+      "name": "Model Context Protocol specification",
+      "url": "https://modelcontextprotocol.io/specification/latest",
+      "type": "docs"
+    }
+  ],
+  "updates": [
+    {
+      "name": "OpenAI Codex docs index",
+      "url": "https://developers.openai.com/codex",
+      "type": "docs"
+    },
+    {
+      "name": "OpenAI Codex GitHub releases",
+      "url": "https://github.com/openai/codex/releases",
+      "type": "changelog"
+    }
+  ],
+  "index": "https://developers.openai.com/codex/cli/slash-commands"
+}

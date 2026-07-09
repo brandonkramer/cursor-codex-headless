@@ -1,0 +1,77 @@
+# Codex Headless
+
+Cursor plugin for headless Codex: MCP tools, CLI, profiles, agent skills, and the **codex-reviewer** subagent for multi-agent orchestration.
+
+## Install
+
+```bash
+cd ~/.cursor/plugins/local/codex-headless
+chmod +x bin/codex-headless bin/codex-headless-mcp scripts/*.sh
+pnpm install
+bash scripts/install.sh    # profiles + schemas → ~/.codex/
+```
+
+Enable the **codex-headless** plugin in Cursor (loads skills + MCP). Or add to `~/.cursor/mcp.json`:
+
+```json
+"codex-headless": {
+  "command": "bash",
+  "args": ["/absolute/path/to/codex-headless/bin/codex-headless-mcp"]
+}
+```
+
+## Use
+
+**In Cursor (orchestrator + worker subagents):** prefer MCP tools — `codex_headless_review`, `codex_headless_implement`, `codex_headless_probe`. Final verification: **codex-reviewer** plugin agent.
+
+**Shell / CI:** `bin/codex-headless` (same flags as MCP):
+
+```bash
+codex-headless review --uncommitted
+codex-headless implement -p "Implement foo"
+codex-headless probe -p "Survey auth; do not edit"
+codex-headless review --structured -f prompt.md -o verdict.json
+```
+
+**GitHub PR review:** `bash skills/codex-review/scripts/pr-review.sh <PR>`
+
+## Profiles
+
+Installed to `~/.codex/` by `scripts/install.sh`. Reference copies in [`profiles/`](profiles/).
+
+| Profile | Model | Reasoning | Sandbox |
+|---------|-------|-----------|---------|
+| `review` | gpt-5.6-sol | ultra | read-only |
+| `engineer` | gpt-5.6-sol | high | workspace-write |
+| `implement` | gpt-5.6-terra | high | workspace-write |
+| `probe` | gpt-5.6-luna | medium | read-only |
+
+Structured JSON schemas: [`schemas/`](schemas/) → `~/.codex/schemas/`.
+
+## Skills
+
+Canonical Codex skills live in [`skills/`](skills/) — each `SKILL.md` is a thin index; workflows are in `references/`.
+
+| Skill | For |
+|-------|-----|
+| [codex-headless](skills/codex-headless/SKILL.md) | MCP tools |
+| [codex-review](skills/codex-review/SKILL.md) | Review, PR helper, codex-reviewer agent |
+| [codex-implementation](skills/codex-implementation/SKILL.md) | engineer vs implement routing |
+| [codex-computer-use](skills/codex-computer-use/SKILL.md) | UI/browser verify |
+| [codex-mcp](skills/codex-mcp/SKILL.md) | Built-in `codex` / `codex-reply` |
+
+## Agents
+
+| Agent | For |
+|-------|-----|
+| [codex-reviewer](agents/codex-reviewer.md) | Final diff review + tests after worker subagents |
+
+## Dev
+
+```bash
+pnpm typecheck
+pnpm cli -- --help
+pnpm mcp
+```
+
+MIT

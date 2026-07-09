@@ -1,0 +1,52 @@
+{
+  "sources": [
+    {
+      "name": "Codex non-interactive mode (`codex exec`, `--ephemeral`)",
+      "url": "https://developers.openai.com/codex/noninteractive",
+      "type": "docs"
+    },
+    {
+      "name": "Codex CLI `codex mcp-server`",
+      "url": "https://developers.openai.com/codex/cli/slash-commands",
+      "type": "docs"
+    },
+    {
+      "name": "Codex advanced configuration (profiles via `--profile`)",
+      "url": "https://developers.openai.com/codex/config-advanced",
+      "type": "docs"
+    },
+    {
+      "name": "Codex sample `config.toml`",
+      "url": "https://developers.openai.com/codex/config-sample",
+      "type": "docs"
+    },
+    {
+      "name": "Model Context Protocol specification",
+      "url": "https://modelcontextprotocol.io/specification/latest",
+      "type": "docs"
+    },
+    {
+      "name": "MCP TypeScript SDK",
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk",
+      "type": "docs"
+    }
+  ],
+  "updates": [
+    {
+      "name": "OpenAI Codex docs index",
+      "url": "https://developers.openai.com/codex",
+      "type": "docs"
+    },
+    {
+      "name": "OpenAI Codex GitHub releases",
+      "url": "https://github.com/openai/codex/releases",
+      "type": "changelog"
+    },
+    {
+      "name": "@modelcontextprotocol/sdk releases",
+      "url": "https://github.com/modelcontextprotocol/typescript-sdk/releases",
+      "type": "changelog"
+    }
+  ],
+  "index": "https://developers.openai.com/codex/noninteractive"
+}

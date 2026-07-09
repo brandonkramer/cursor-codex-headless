@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "changed_files": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "summary": {
+      "type": "string"
+    },
+    "risks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "recommended_verification": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["changed_files", "summary", "risks"],
+  "additionalProperties": false
+}
