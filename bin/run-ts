@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+run_ts() {
+  local entry="$1"
+  shift
+
+  if [[ -x "$ROOT/node_modules/.bin/tsx" ]]; then
+    exec "$ROOT/node_modules/.bin/tsx" "$ROOT/$entry" "$@"
+  fi
+
+  if command -v tsx >/dev/null 2>&1; then
+    exec tsx "$ROOT/$entry" "$@"
+  fi
+
+  echo "No runtime found. Install deps first:" >&2
+  echo "  cd \"$ROOT\" && pnpm install" >&2
+  exit 1
+}
+
+run_ts "$@"
