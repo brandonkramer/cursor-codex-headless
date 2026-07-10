@@ -31,7 +31,7 @@ Independent read-only review via Codex. Prefer your own review for small local c
 
 ## Quick decisions
 
-**GitHub PR comment?** → [pr-review-github.md](references/pr-review-github.md)
+**GitHub PR comment?** → [pr-review-github.md](references/pr-review-github.md) (background shell + `CODEX_PR_REVIEW_DONE` sentinel — no fixed timeout)
 
 **Quick local diff, no custom prompt?** → [builtin-diff-review.md](references/builtin-diff-review.md)
 

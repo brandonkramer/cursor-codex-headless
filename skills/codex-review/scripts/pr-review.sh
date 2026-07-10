@@ -9,12 +9,44 @@
 #   CODEX_PR_REVIEW_DRY_RUN=1          # print body, do not post
 #   CODEX_PR_REVIEW_EVENT=auto         # auto | approve | comment | request-changes
 #   CODEX_PR_REVIEW_ALWAYS_COMMENT=1   # force --comment (ignore verdict mapping)
+#   CODEX_STREAM=1                     # 0 or --no-stream on codex-pty.py to buffer
+#   CODEX_MAX_SECS=600                 # wall-clock wait before kill
 
 set -euo pipefail
 
 PR="${1:?PR number required}"
 REPO_ROOT="${2:-.}"
 MODEL="${CODEX_REVIEW_MODEL:-gpt-5.6-sol}"
+VERDICT_NORM=""
+REVIEW_EVENT=""
+POSTED=0
+DONE_EMITTED=0
+
+emit_done_sentinel() {
+  local exit_code="${1:-$?}"
+  if [ "$DONE_EMITTED" -eq 1 ]; then
+    return
+  fi
+  DONE_EMITTED=1
+  printf 'CODEX_PR_REVIEW_DONE exit=%s pr=%s verdict=%s event=%s dry_run=%s posted=%s\n' \
+    "$exit_code" \
+    "$PR" \
+    "${VERDICT_NORM:-unknown}" \
+    "${REVIEW_EVENT:-unknown}" \
+    "${CODEX_PR_REVIEW_DRY_RUN:-0}" \
+    "$POSTED" \
+    >&2
+}
+
+trap 'emit_done_sentinel $?' EXIT
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
 
 if ! command -v gh >/dev/null 2>&1; then
   echo "error: gh CLI required" >&2
@@ -26,6 +58,10 @@ if ! command -v codex >/dev/null 2>&1; then
 fi
 if ! command -v jq >/dev/null 2>&1; then
   echo "error: jq required" >&2
+  exit 1
+fi
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "error: python3 required" >&2
   exit 1
 fi
 
@@ -105,12 +141,14 @@ $(cat "$DIFF_FILE")
 --- DIFF END ---
 EOF
 
-# Profile review: ultra reasoning, read-only, never prompt. Markdown output for GitHub.
-codex exec --profile review --ephemeral \
+# Profile review: ultra reasoning, read-only. PTY streams progress; -o captures final body.
+python3 "$SCRIPT_DIR/codex-pty.py" \
+  -f "$PROMPT_FILE" \
+  --max-secs "${CODEX_MAX_SECS:-600}" \
+  --profile review --ephemeral \
   -m "$MODEL" \
   -o "$OUT_FILE" \
-  - <"$PROMPT_FILE" \
-  >/dev/null 2>&1
+  -
 
 REVIEW_BODY="$(cat "$OUT_FILE")"
 if [ -z "$REVIEW_BODY" ]; then
@@ -206,4 +244,5 @@ case "$REVIEW_EVENT" in
     ;;
 esac
 
+POSTED=1
 echo "Posted Codex review on PR #${PR} (event=${REVIEW_EVENT}, verdict=${VERDICT_NORM:-unknown}, model=${MODEL})"

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.2] - 2026-07-10
+
+### Added
+- `pr-review.sh` prints `CODEX_PR_REVIEW_DONE` on stderr at exit for agent completion detection.
+- Documented Cursor background + Await / `notify_on_output` invocation in `pr-review-github.md`.
+
+## [1.3.1] - 2026-07-10
+
+### Changed
+- `pr-review.sh` runs Codex via `codex-pty.py` — live stdout streaming by default (`CODEX_STREAM=0` to buffer).
+- Added `codex-pty.py` and `delegation_pty.py` alongside `pr-review.sh`.
+
 ## [1.3.0] - 2026-07-10
 
 ### Changed
