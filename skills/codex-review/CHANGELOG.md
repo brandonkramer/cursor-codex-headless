@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3] - 2026-07-12
+
+### Changed
+- Orchestrated review: prefer MCP, bound ~60–90s waits, emit `inconclusive` on hang/timeout.
+- Document parent anti-hang rules (no AwaitShell polling, no resume-while-running, never fake `codex-reviewer` as `generalPurpose`).
+- `reviewer-verdict.schema.json` adds `inconclusive` verdict.
+
 ## [1.3.2] - 2026-07-10
 
 ### Added

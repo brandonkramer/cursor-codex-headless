@@ -3,7 +3,7 @@
   "properties": {
     "verdict": {
       "type": "string",
-      "enum": ["pass", "pass-with-notes", "fail"]
+      "enum": ["pass", "pass-with-notes", "fail", "inconclusive"]
     },
     "summary": {
       "type": "string"

@@ -90,7 +90,8 @@ Built-in `codex mcp-server` is separate — only `codex` + `codex-reply` tools, 
 
 - `codex_headless_implement` is always Terra — not the default `engineer` profile
 - Ephemeral tool runs cannot resume prior context
-- Large diffs on `review_uncommitted` with ultra reasoning may timeout — narrow scope or use shell background
+- Large diffs on `review_uncommitted` with ultra reasoning may timeout — narrow scope, prefer MCP, or emit `verdict: "inconclusive"` after ~60–90s (do not busy-wait / resume-while-running)
+- Never fake `codex-reviewer` as `generalPurpose`; if Task lacks the agent type, call `codex_headless_review` from the parent
 - MCP server requires Node ≥ 22 and `codex` on PATH
 
 ---

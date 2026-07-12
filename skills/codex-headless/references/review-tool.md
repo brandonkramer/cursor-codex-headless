@@ -14,7 +14,8 @@ Read-only review via `--profile review --ephemeral`.
 
 ## codex-reviewer agent
 
-1. Run targeted tests via shell
+1. Run targeted tests via shell (separate gate from Codex agreement)
 2. `codex_headless_review` with `review_uncommitted: true` OR `prompt` + `structured: true`
+3. On ~60–90s hang/timeout → `verdict: "inconclusive"` (prefer MCP; avoid open-ended shell waits)
 
 Shell details: [codex-review/references/orchestrated-review.md](../codex-review/references/orchestrated-review.md).
