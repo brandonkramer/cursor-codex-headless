@@ -1,6 +1,7 @@
 # codex_headless_review
 
-Read-only review via `--profile review --ephemeral`.
+Read-only review via `--profile review --ephemeral --ignore-user-config`
+(skips global MCP/plugins from `config.toml`).
 
 ## Parameters
 

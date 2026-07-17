@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.4] - 2026-07-17
+
+### Changed
+- Headless review always passes `--ignore-user-config` so global MCP/plugins are not loaded
+  (`mcp_servers={}` does not clear; profile + auth still apply).
+
 ## [1.3.3] - 2026-07-12
 
 ### Changed

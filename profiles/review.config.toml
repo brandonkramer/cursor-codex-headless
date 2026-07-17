@@ -1,5 +1,6 @@
 # Headless read-only review (PR, diff, architecture).
-# Usage: codex exec --profile review --ephemeral ...
+# Usage: codex exec --profile review --ephemeral --ignore-user-config ...
+# --ignore-user-config: skip global MCP/plugins (mcp_servers={} does not clear).
 model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
 approval_policy = "never"

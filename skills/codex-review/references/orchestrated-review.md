@@ -46,7 +46,7 @@ bin/codex-headless review --structured -f "$PROMPT" -o "$REPORT"
 Raw `codex exec` (equivalent):
 
 ```bash
-codex exec --profile review --ephemeral \
+codex exec --profile review --ephemeral --ignore-user-config \
   --output-schema ~/.codex/schemas/reviewer-verdict.schema.json \
   -o "$REPORT" - < "$PROMPT" < /dev/null
 ```

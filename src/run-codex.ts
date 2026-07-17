@@ -106,6 +106,13 @@ export async function runCodexExec(opts: RunCodexOptions): Promise<RunCodexResul
 
   const args = ["exec", "--profile", opts.profile, "--ephemeral", "-o", outFile];
 
+  // Reviews skip ~/.codex/config.toml so global MCP/plugins are not loaded.
+  // Profile still applies via --profile (review.config.toml) + auth from CODEX_HOME.
+  // Workaround: -c 'mcp_servers={}' does not clear servers (Codex merge bug).
+  if (opts.profile === "review") {
+    args.push("--ignore-user-config");
+  }
+
   if (opts.structured) {
     applyStructuredSchema(args, opts.profile);
   }

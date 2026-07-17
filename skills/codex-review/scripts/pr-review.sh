@@ -145,7 +145,7 @@ EOF
 python3 "$SCRIPT_DIR/codex-pty.py" \
   -f "$PROMPT_FILE" \
   --max-secs "${CODEX_MAX_SECS:-600}" \
-  --profile review --ephemeral \
+  --profile review --ephemeral --ignore-user-config \
   -m "$MODEL" \
   -o "$OUT_FILE" \
   -

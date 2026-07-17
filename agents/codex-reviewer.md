@@ -32,8 +32,8 @@ Load skills shipped in this plugin:
 
    Shell fallback (only if MCP missing). Keep it one-shot with `--ephemeral` and stdin closed:
    ```bash
-   codex exec --profile review --ephemeral review --uncommitted < /dev/null
-   codex exec --profile review --ephemeral \
+   codex exec --profile review --ephemeral --ignore-user-config review --uncommitted < /dev/null
+   codex exec --profile review --ephemeral --ignore-user-config \
      --output-schema ~/.codex/schemas/reviewer-verdict.schema.json \
      -o "$REPORT" - < "$PROMPT" < /dev/null
    ```

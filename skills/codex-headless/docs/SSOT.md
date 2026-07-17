@@ -27,7 +27,7 @@ Cursor plugin MCP tools that wrap `codex exec --profile … --ephemeral` for mul
 
 | Tool | Maps to | Profile | Sandbox |
 |------|---------|---------|---------|
-| `codex_headless_review` | `codex exec --profile review --ephemeral` | review | read-only |
+| `codex_headless_review` | `codex exec --profile review --ephemeral --ignore-user-config` | review | read-only |
 | `codex_headless_implement` | `codex exec --profile implement --ephemeral` | implement | workspace-write |
 | `codex_headless_probe` | `codex exec --profile probe --ephemeral` | probe | read-only |
 
