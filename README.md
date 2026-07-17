@@ -41,7 +41,7 @@ Installed to `~/.codex/` by `scripts/install.sh`. Reference copies in [`profiles
 
 | Profile | Model | Reasoning | Sandbox |
 |---------|-------|-----------|---------|
-| `review` | gpt-5.6-sol | ultra | read-only |
+| `review` | gpt-5.6-sol | xhigh | read-only |
 | `engineer` | gpt-5.6-sol | high | workspace-write |
 | `implement` | gpt-5.6-terra | high | workspace-write |
 | `probe` | gpt-5.6-luna | medium | read-only |

@@ -24,7 +24,7 @@ export function registerCodexHeadlessTools(server: McpServer): void {
     "codex_headless_review",
     {
       description:
-        "Read-only Codex review via codex exec --profile review --ephemeral (gpt-5.6-sol, ultra). Use review_uncommitted/review_base for built-in diff review, or prompt for custom scope. Set structured=true for reviewer-verdict JSON schema.",
+        "Read-only Codex review via codex exec --profile review --ephemeral (gpt-5.6-sol, xhigh). Use review_uncommitted/review_base for built-in diff review, or prompt for custom scope. Set structured=true for reviewer-verdict JSON schema.",
       inputSchema: {
         prompt: promptField,
         cwd: cwdField,

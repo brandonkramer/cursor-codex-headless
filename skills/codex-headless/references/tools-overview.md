@@ -4,7 +4,7 @@ Plugin tools shell out to `codex exec --profile … --ephemeral`.
 
 | Tool | Profile | Reasoning | Sandbox |
 |------|---------|-----------|---------|
-| `codex_headless_review` | review | ultra | read-only |
+| `codex_headless_review` | review | xhigh | read-only |
 | `codex_headless_implement` | implement | high | workspace-write |
 | `codex_headless_probe` | probe | medium | read-only |
 
