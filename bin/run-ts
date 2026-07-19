@@ -2,6 +2,9 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
+# Cursor GUI MCP spawns with a minimal PATH (no nvm). Ensure common node locations.
+export PATH="/usr/local/bin:/opt/homebrew/bin:${HOME}/.local/bin:${PATH:-/usr/bin:/bin}"
+
 run_ts() {
   local entry="$1"
   shift

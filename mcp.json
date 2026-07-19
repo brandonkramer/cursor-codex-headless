@@ -2,7 +2,13 @@
   "mcpServers": {
     "codex-headless": {
       "command": "bash",
-      "args": ["bin/codex-headless-mcp"]
+      "args": [
+        "-c",
+        "LOCAL=\"$HOME/.cursor/plugins/local/codex-headless/bin/codex-headless-mcp\"; if [ -x \"$LOCAL\" ]; then exec \"$LOCAL\"; fi; echo 'codex-headless-mcp not found at ~/.cursor/plugins/local/codex-headless' >&2; exit 127"
+      ],
+      "env": {
+        "PATH": "/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin"
+      }
     }
   }
 }
