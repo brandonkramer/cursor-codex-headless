@@ -2,23 +2,56 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-# Cursor GUI MCP spawns with a minimal PATH (no nvm). Ensure common node locations.
-export PATH="/usr/local/bin:/opt/homebrew/bin:${HOME}/.local/bin:${PATH:-/usr/bin:/bin}"
+# Cursor GUI MCP spawns with a minimal PATH (no nvm/fnm). Expand common Node locations.
+prepend_path() {
+  local dir="$1"
+  if [[ -d "$dir" ]]; then
+    case ":${PATH:-}:" in
+      *":$dir:"*) ;;
+      *) PATH="$dir${PATH:+:$PATH}" ;;
+    esac
+  fi
+}
+
+prepend_path "/usr/local/bin"
+prepend_path "/opt/homebrew/bin"
+prepend_path "${HOME}/.local/bin"
+prepend_path "${HOME}/.volta/bin"
+prepend_path "${HOME}/.fnm/current/bin"
+
+# Latest nvm node (if present)
+if [[ -d "${HOME}/.nvm/versions/node" ]]; then
+  # shellcheck disable=SC2012
+  latest_nvm="$(ls -1 "${HOME}/.nvm/versions/node" 2>/dev/null | sort -V | tail -1 || true)"
+  if [[ -n "${latest_nvm:-}" ]]; then
+    prepend_path "${HOME}/.nvm/versions/node/${latest_nvm}/bin"
+  fi
+fi
+
+export PATH="${PATH:-/usr/bin:/bin}"
 
 run_ts() {
   local entry="$1"
   shift
+  local abs="$ROOT/$entry"
+
+  # Prefer node --import tsx from plugin cwd (reliable under Cursor's minimal env)
+  if command -v node >/dev/null 2>&1 && [[ -d "$ROOT/node_modules/tsx" ]]; then
+    cd "$ROOT"
+    exec node --import tsx "$abs" "$@"
+  fi
 
   if [[ -x "$ROOT/node_modules/.bin/tsx" ]]; then
-    exec "$ROOT/node_modules/.bin/tsx" "$ROOT/$entry" "$@"
+    exec "$ROOT/node_modules/.bin/tsx" "$abs" "$@"
   fi
 
   if command -v tsx >/dev/null 2>&1; then
-    exec tsx "$ROOT/$entry" "$@"
+    exec tsx "$abs" "$@"
   fi
 
   echo "No runtime found. Install deps first:" >&2
   echo "  cd \"$ROOT\" && pnpm install" >&2
+  echo "  (need node>=22 and local tsx)" >&2
   exit 1
 }
 

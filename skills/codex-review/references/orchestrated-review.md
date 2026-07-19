@@ -4,7 +4,15 @@ Final verification pass after worker subagents in a multi-agent orchestration wo
 
 Invoked via Task with `subagent_type: "codex-reviewer"` (plugin agent in `agents/codex-reviewer.md`).
 
-If Task does **not** expose `codex-reviewer`, the **parent** must call MCP `codex_headless_review` (`structured: true`) directly — **never** fake the reviewer as `generalPurpose` / `/worker`.
+If Task does **not** expose `codex-reviewer`, the **parent** must call MCP `codex_headless_review` (`structured: true`) directly — **never** fake the reviewer as `generalPurpose` / `/worker` / `/worker-composer`.
+
+## Canonical install
+
+```text
+~/.cursor/plugins/local/codex-headless
+```
+
+Never use `~/.claude/plugins/cache/codex-headless-local/...` (stale copies).
 
 ## Order
 
@@ -14,10 +22,10 @@ If Task does **not** expose `codex-reviewer`, the **parent** must call MCP `code
 
 Keep **tests** and **Codex** separate in the report: tests-green ≠ Codex-approved.
 
-## MCP (preferred)
+## MCP (required when the tool exists)
 
 ```json
-{ "review_uncommitted": true }
+{ "review_uncommitted": true, "structured": true }
 ```
 
 or
@@ -28,26 +36,32 @@ or
 
 Tool: `codex_headless_review` — see [codex-headless/references/review-tool.md](../codex-headless/references/review-tool.md).
 
-Prefer MCP over open-ended shell. Bound the wait (~60–90s); on timeout/hang emit `verdict: "inconclusive"` and return.
+**Hard rules**
 
-## Parent wait rules (orchestrator)
-
-- Rely on Task/subagent **completion notifications** — do not poll with `AwaitShell` sleep loops.
+- If GetMcpTools lists `codex_headless_review` → **must** use MCP. Do not shell out.
+- Never run Codex review as a **Background** shell (Cursor turn abort kills it; no report file).
+- Parent: rely on Task/subagent **completion notifications** — do not poll with `AwaitShell` sleep loops.
 - Never `resume` a still-running reviewer agent; wait for completion or abort, then integrate.
-- On review timeout, fold `inconclusive` into the user summary and finish — do not block forever.
 
-## Shell fallback
+## Timeouts
+
+Large Sol xhigh reviews often exceed 90s. Soft hang bound: **~10 minutes** with no progress → `verdict: "inconclusive"`. Do not treat 60–90s as automatic failure.
+
+## Shell fallback (MCP tool missing only)
+
+Foreground/blocking until the report file exists; stdin closed:
 
 ```bash
-REPORT="$(mktemp)"
-bin/codex-headless review --structured -f "$PROMPT" -o "$REPORT"
+PLUGIN="$HOME/.cursor/plugins/local/codex-headless"
+REPORT="$(mktemp -t codex-review-XXXXXX.json)"
+"$PLUGIN/bin/codex-headless" review --structured -f "$PROMPT" -o "$REPORT" -C "$CWD" < /dev/null
 ```
 
-Raw `codex exec` (equivalent):
+Equivalent raw `codex exec` only if local CLI missing:
 
 ```bash
 codex exec --profile review --ephemeral --ignore-user-config \
-  --output-schema ~/.codex/schemas/reviewer-verdict.schema.json \
+  --output-schema "$HOME/.codex/schemas/reviewer-verdict.schema.json" \
   -o "$REPORT" - < "$PROMPT" < /dev/null
 ```
 

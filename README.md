@@ -11,14 +11,11 @@ pnpm install
 bash scripts/install.sh    # profiles + schemas → ~/.codex/
 ```
 
-Enable the **codex-headless** plugin in Cursor (loads skills + MCP). Or add to `~/.cursor/mcp.json`:
-
-```json
-"codex-headless": {
-  "command": "bash",
-  "args": ["/absolute/path/to/codex-headless/bin/codex-headless-mcp"]
-}
-```
+Enable the **codex-headless** plugin in Cursor (loads skills + MCP from
+`~/.cursor/plugins/local/codex-headless` — not Claude plugin cache). Plugin
+`mcp.json` launches via `node --import tsx src/mcp/server.ts` with an expanded
+PATH (Homebrew / nvm / Volta). Or add to `~/.cursor/mcp.json` using that same
+pattern / `bin/codex-headless-mcp`.
 
 ## Use
 

@@ -4,7 +4,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "LOCAL=\"$HOME/.cursor/plugins/local/codex-headless/bin/codex-headless-mcp\"; if [ -x \"$LOCAL\" ]; then exec \"$LOCAL\"; fi; echo 'codex-headless-mcp not found at ~/.cursor/plugins/local/codex-headless' >&2; exit 127"
+        "ROOT=\"$HOME/.cursor/plugins/local/codex-headless\"; if [ ! -d \"$ROOT\" ]; then echo \"codex-headless not found at $ROOT\" >&2; exit 127; fi; export PATH=\"/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$HOME/.volta/bin:$PATH\"; if [ -d \"$HOME/.nvm/versions/node\" ]; then NVM_LATEST=$(ls -1 \"$HOME/.nvm/versions/node\" 2>/dev/null | sort -V | tail -1); [ -n \"$NVM_LATEST\" ] && export PATH=\"$HOME/.nvm/versions/node/$NVM_LATEST/bin:$PATH\"; fi; cd \"$ROOT\" || exit 127; if command -v node >/dev/null 2>&1 && [ -d node_modules/tsx ]; then exec node --import tsx src/mcp/server.ts; fi; if [ -x bin/codex-headless-mcp ]; then exec bin/codex-headless-mcp; fi; echo \"codex-headless MCP: run pnpm install in $ROOT\" >&2; exit 127"
       ],
       "env": {
         "PATH": "/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin"

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.5] - 2026-07-19
+
+### Changed
+- Orchestrated review: MCP `codex_headless_review` **required** when available; ban Background shell for Codex.
+- Soft hang bound raised to ~10 minutes (no longer treat 60–90s as failure).
+- Canonical install path: `~/.cursor/plugins/local/codex-headless` only (never Claude plugin cache).
+- MCP launch hardened: `node --import tsx` + expanded PATH (nvm/Homebrew/Volta) in `mcp.json` / `bin/run-ts`.
+
 ## [1.3.4] - 2026-07-17
 
 ### Changed
