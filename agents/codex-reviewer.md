@@ -57,7 +57,8 @@ Load skills shipped in this plugin:
 
 4. **Timeout / hang**
    - Sol xhigh on large diffs can take **several minutes**. Do **not** treat ~60–90s as a hard fail.
-   - Soft guidance: if MCP/shell has produced **no** progress for **~10 minutes**, emit `verdict: "inconclusive"` with a short residual_gaps note and return.
+   - Soft guidance: if MCP/shell has produced **no** `[codex-headless]` progress for **~10 minutes**, emit `verdict: "inconclusive"` with a short residual_gaps note and return.
+   - Include `usage` from the tool result when summarizing cost across `/codex-review-loop` iterations.
    - Do not busy-wait, sleep-loop, or resume a still-running Codex session.
    - User cancel / stream abort → `inconclusive` (do not invent findings).
 

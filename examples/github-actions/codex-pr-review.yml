@@ -1,0 +1,89 @@
+# Copy into your repo as .github/workflows/codex-pr-review.yml
+# Requires secret: OPENAI_API_KEY (or provider key used by openai/codex-action)
+#
+# Uses the same hermetic flags as this plugin's review path:
+#   --ephemeral --ignore-user-config --ignore-rules
+# Plus structured output via schemas/reviewer-verdict.schema.json
+#
+# Pin/copy the schema into your repo (or checkout this plugin as a path)
+# before enabling the workflow.
+
+name: Codex PR review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  codex_review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      final_message: ${{ steps.run_codex.outputs.final-message }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Prefetch base and head
+        env:
+          PR_BASE_REF: ${{ github.event.pull_request.base.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          git fetch --no-tags origin \
+            "$PR_BASE_REF" \
+            "+refs/pull/$PR_NUMBER/head"
+
+      - name: Run Codex review
+        id: run_codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          permission-profile: ":read-only"
+          safety-strategy: drop-sudo
+          # Custom instructions for `codex exec review --base …` (appended after subcommand).
+          prompt-file: examples/github-actions/prompts/pr-review.md
+          output-schema-file: schemas/reviewer-verdict.schema.json
+          output-file: review-verdict.json
+          # Hermetic + durable JSONL (action still exposes final-message).
+          # Built-in review vs PR base branch.
+          codex-args: >-
+            ["--ephemeral","--ignore-user-config","--ignore-rules","--json","review","--base","origin/${{ github.event.pull_request.base.ref }}"]
+
+      - name: Upload verdict
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-review-verdict
+          path: review-verdict.json
+          if-no-files-found: warn
+
+  post_feedback:
+    runs-on: ubuntu-latest
+    needs: codex_review
+    if: needs.codex_review.outputs.final_message != ''
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        env:
+          CODEX_FINAL_MESSAGE: ${{ needs.codex_review.outputs.final_message }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = process.env.CODEX_FINAL_MESSAGE;
+            if (!body) return;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body:
+                "### Codex headless review\n\n" +
+                body +
+                "\n\n---\n_Automated via openai/codex-action + reviewer-verdict schema._",
+            });

@@ -10,7 +10,7 @@ skip:
 
 ## CODEX REVIEW
 
-Independent read-only code review via `codex exec --profile review --ephemeral --ignore-user-config` (gpt-5.6-sol, xhigh, read-only; no global MCP).
+Independent read-only code review via `codex exec --profile review --ephemeral --ignore-user-config --ignore-rules` (gpt-5.6-sol, xhigh, read-only; no global MCP/rules).
 
 ---
 
@@ -27,11 +27,11 @@ Independent read-only code review via `codex exec --profile review --ephemeral -
 
 | Command | What |
 |---------|------|
-| `codex exec --profile review --ephemeral --ignore-user-config review --uncommitted` | Review working tree |
-| `codex exec --profile review --ephemeral --ignore-user-config review --base origin/main` | Review branch vs base |
-| `codex exec --profile review --ephemeral --ignore-user-config review --commit <sha>` | Review one commit |
-| `codex exec --profile review --ephemeral --ignore-user-config -o out.md - < prompt.md` | Custom review via stdin prompt |
-| `codex exec --profile review --ephemeral --ignore-user-config --output-schema … -o out.json - < prompt.md` | Structured orchestration verdict |
+| `codex exec --profile review --ephemeral --ignore-user-config --ignore-rules review --uncommitted` | Review working tree |
+| `codex exec --profile review --ephemeral --ignore-user-config --ignore-rules review --base origin/main` | Review branch vs base |
+| `codex exec --profile review --ephemeral --ignore-user-config --ignore-rules review --commit <sha>` | Review one commit |
+| `codex exec --profile review --ephemeral --ignore-user-config --ignore-rules -o out.md - < prompt.md` | Custom review via stdin prompt |
+| `codex exec --profile review --ephemeral --ignore-user-config --ignore-rules --json --output-schema … -o out.json - < prompt.md` | Structured orchestration verdict |
 | `bash scripts/pr-review.sh <pr> [repo-root]` | PR diff → Codex → `gh pr review` (maps verdict to approve/comment/request-changes) |
 
 **Deprecated:** top-level `codex review` (without `exec`). Use `codex exec review` only.

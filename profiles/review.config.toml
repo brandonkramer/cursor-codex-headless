@@ -1,6 +1,7 @@
 # Headless read-only review (PR, diff, architecture).
-# Usage: codex exec --profile review --ephemeral --ignore-user-config ...
+# Usage: codex exec --profile review --ephemeral --ignore-user-config --ignore-rules ...
 # --ignore-user-config: skip global MCP/plugins (mcp_servers={} does not clear).
+# --ignore-rules: skip user/project execpolicy .rules for hermetic CI/orchestration.
 model = "gpt-5.6-sol"
 model_reasoning_effort = "xhigh"
 approval_policy = "never"

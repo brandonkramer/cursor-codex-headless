@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.6] - 2026-07-19
+
+### Added
+- Hermetic review also passes `--ignore-rules` (with `--ignore-user-config`).
+- JSONL path by default (`--json`): durable last `agent_message` when `-o` is empty; `turn.completed.usage` telemetry.
+- Progress / liveness: JSONL event lines + 15s heartbeats on stderr (`[codex-headless] …`).
+- GitHub Action recipe: `examples/github-actions/codex-pr-review.yml` (`openai/codex-action` + reviewer-verdict schema).
+
+### Changed
+- Plugin version **0.2.4**. MCP/CLI expose `usage`, `contentSource`, optional `jsonl_path`.
+
 ## [1.3.5] - 2026-07-19
 
 ### Changed

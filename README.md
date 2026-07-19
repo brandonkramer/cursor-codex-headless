@@ -30,7 +30,11 @@ codex-headless probe -p "Survey auth; do not edit"
 codex-headless review --structured -f prompt.md -o verdict.json
 ```
 
-**GitHub PR review:** `bash skills/codex-review/scripts/pr-review.sh <PR>`
+**GitHub PR review (local helper):** `bash skills/codex-review/scripts/pr-review.sh <PR>`
+
+**GitHub Actions (CI):** copy [`examples/github-actions/codex-pr-review.yml`](examples/github-actions/codex-pr-review.yml) — `openai/codex-action` + hermetic flags + `reviewer-verdict` schema.
+
+Review runs always use `--ignore-user-config --ignore-rules`. JSONL (`--json`) is on by default for durable output + usage telemetry; progress heartbeats go to stderr as `[codex-headless] …`.
 
 ## Profiles
 

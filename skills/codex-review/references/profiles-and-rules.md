@@ -10,8 +10,8 @@ Profiles live in `$CODEX_HOME/*.config.toml`, selected with `--profile <name>`.
 
 ## Exec rules
 
-- One-shot runs: `--profile review --ephemeral --ignore-user-config`
-  (`--ignore-user-config` skips global MCP/plugins from `config.toml`; profile + auth still load)
+- One-shot runs: `--profile review --ephemeral --ignore-user-config --ignore-rules`
+  (`--ignore-user-config` skips global MCP/plugins; `--ignore-rules` skips execpolicy `.rules`; profile + auth still load)
 - Multi-step follow-up: omit `--ephemeral`; use `codex exec resume --last` (settings frozen from first run)
 - Prompt as shell argument: always append `< /dev/null` (background runs exit 144 without it)
 - Background: `run_in_background: true`, `-o <file>`, wait for harness notification — do not poll

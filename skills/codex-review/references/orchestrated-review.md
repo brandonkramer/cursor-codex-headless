@@ -60,10 +60,12 @@ REPORT="$(mktemp -t codex-review-XXXXXX.json)"
 Equivalent raw `codex exec` only if local CLI missing:
 
 ```bash
-codex exec --profile review --ephemeral --ignore-user-config \
+codex exec --profile review --ephemeral --ignore-user-config --ignore-rules --json \
   --output-schema "$HOME/.codex/schemas/reviewer-verdict.schema.json" \
   -o "$REPORT" - < "$PROMPT" < /dev/null
 ```
+
+CI without Cursor: see `examples/github-actions/codex-pr-review.yml`.
 
 Populate `tests` from shell commands you ran before Codex review.
 

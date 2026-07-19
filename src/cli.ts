@@ -4,10 +4,8 @@
  */
 import { readFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
-import {
-  type ImplementProfile,
-  runCodexExec,
-} from "./run-codex.ts";
+import { type ImplementProfile, runCodexExec } from "./run-codex.ts";
+import { formatUsageLine } from "./jsonl.ts";
 
 function usage(): string {
   return `codex-headless — headless codex exec wrapper
@@ -25,6 +23,12 @@ Options:
   --structured        Emit JSON via output schema (review / implement only)
   --quiet             Do not print content to stdout (requires -o for implement/probe)
   --profile           implement subcommand only: engineer (default) or implement
+  --json              Capture JSONL (default); durable agent_message + usage telemetry
+  --no-json           Disable --json (legacy -o / stderr progress only)
+  --jsonl PATH        Write full JSONL event stream to PATH (implies --json)
+  --no-heartbeat      Disable periodic liveness lines on stderr
+
+Hermetic review flags (always): --ignore-user-config --ignore-rules
 
 Examples:
   codex-headless review --uncommitted
@@ -50,6 +54,25 @@ async function loadPrompt(
   return undefined;
 }
 
+const sharedRunOptions = {
+  json: { type: "boolean" as const, default: true },
+  "no-json": { type: "boolean" as const, default: false },
+  jsonl: { type: "string" as const },
+  "no-heartbeat": { type: "boolean" as const, default: false },
+};
+
+function resolveJsonFlags(values: {
+  json?: boolean;
+  "no-json"?: boolean;
+  jsonl?: string;
+}): { json: boolean; jsonlPath?: string } {
+  if (values["no-json"] && values.jsonl) {
+    throw new Error("--jsonl requires JSONL capture; omit --no-json");
+  }
+  const json = values["no-json"] ? false : true;
+  return { json, jsonlPath: values.jsonl };
+}
+
 async function runReview(args: string[]): Promise<number> {
   const { values } = parseArgs({
     args,
@@ -63,6 +86,7 @@ async function runReview(args: string[]): Promise<number> {
       cwd: { type: "string", short: "C" },
       structured: { type: "boolean", default: false },
       quiet: { type: "boolean", default: false },
+      ...sharedRunOptions,
     },
     allowPositionals: false,
   });
@@ -84,6 +108,7 @@ async function runReview(args: string[]): Promise<number> {
   }
 
   const prompt = await loadPrompt(values.file, values.prompt, false);
+  const { json, jsonlPath } = resolveJsonFlags(values);
 
   const result = await runCodexExec({
     profile: "review",
@@ -94,6 +119,9 @@ async function runReview(args: string[]): Promise<number> {
     reviewCommit: values.commit,
     prompt,
     outputPath: values.output,
+    json,
+    jsonlPath,
+    heartbeatMs: values["no-heartbeat"] ? 0 : undefined,
   });
 
   if (!values.quiet) {
@@ -102,6 +130,9 @@ async function runReview(args: string[]): Promise<number> {
   }
   if (values.output) {
     process.stderr.write(`wrote ${values.output}\n`);
+  }
+  if (result.usage) {
+    process.stderr.write(`${formatUsageLine(result.usage)}\n`);
   }
   return result.ok ? 0 : result.exitCode;
 }
@@ -117,6 +148,7 @@ async function runImplement(args: string[]): Promise<number> {
       cwd: { type: "string", short: "C" },
       structured: { type: "boolean", default: false },
       quiet: { type: "boolean", default: false },
+      ...sharedRunOptions,
     },
     allowPositionals: false,
   });
@@ -127,6 +159,7 @@ async function runImplement(args: string[]): Promise<number> {
   }
 
   const prompt = await loadPrompt(values.file, values.prompt, true);
+  const { json, jsonlPath } = resolveJsonFlags(values);
 
   const result = await runCodexExec({
     profile,
@@ -134,6 +167,9 @@ async function runImplement(args: string[]): Promise<number> {
     structured: values.structured,
     prompt,
     outputPath: values.output,
+    json,
+    jsonlPath,
+    heartbeatMs: values["no-heartbeat"] ? 0 : undefined,
   });
 
   if (!values.quiet) {
@@ -142,6 +178,9 @@ async function runImplement(args: string[]): Promise<number> {
   }
   if (values.output) {
     process.stderr.write(`wrote ${values.output}\n`);
+  }
+  if (result.usage) {
+    process.stderr.write(`${formatUsageLine(result.usage)}\n`);
   }
   return result.ok ? 0 : result.exitCode;
 }
@@ -155,17 +194,22 @@ async function runProbe(args: string[]): Promise<number> {
       output: { type: "string", short: "o" },
       cwd: { type: "string", short: "C" },
       quiet: { type: "boolean", default: false },
+      ...sharedRunOptions,
     },
     allowPositionals: false,
   });
 
   const prompt = await loadPrompt(values.file, values.prompt, true);
+  const { json, jsonlPath } = resolveJsonFlags(values);
 
   const result = await runCodexExec({
     profile: "probe",
     cwd: values.cwd,
     prompt,
     outputPath: values.output,
+    json,
+    jsonlPath,
+    heartbeatMs: values["no-heartbeat"] ? 0 : undefined,
   });
 
   if (!values.quiet) {
@@ -174,6 +218,9 @@ async function runProbe(args: string[]): Promise<number> {
   }
   if (values.output) {
     process.stderr.write(`wrote ${values.output}\n`);
+  }
+  if (result.usage) {
+    process.stderr.write(`${formatUsageLine(result.usage)}\n`);
   }
   return result.ok ? 0 : result.exitCode;
 }
